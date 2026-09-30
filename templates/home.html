@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{# home.html — the front page. You may edit this freely. #}
+{% block content %}
+<section class="hero">
+  <div class="hero-box" style="padding: 32px 28px;">
+    <span class="badge gold" style="margin-bottom: 8px;">🎮 Personal Finance & Quest Planner</span>
+    <h1 style="font-size: 32px; color: var(--maroon); margin-bottom: 12px;">MoneyQuest</h1>
+    <p class="lead" style="font-size: 16px; margin-bottom: 20px;">{{ team.group.description }}</p>
+    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+      <a href="{{ url_for('page', name='page1') }}" class="btn">📊 Dashboard</a>
+      <a href="{{ url_for('page', name='page2') }}" class="btn ghost">📝 Income & Expense</a>
+      <a href="{{ url_for('page', name='page3') }}" class="btn ghost">🎯 Quest Planner</a>
+      <a href="{{ url_for('page', name='page4') }}" class="btn ghost">🎲 Daily Quest</a>
+    </div>
+  </div>
+</section>
+
+<h2>🚀 ฟีเจอร์หลักในระบบ</h2>
+<section class="cards" style="margin-bottom: 30px;">
+  <a class="card" href="{{ url_for('page', name='page1') }}">
+    <span class="card-kicker">Page 1 · Profile & Stats</span>
+    <span class="card-title">Dashboard</span>
+    <p class="note" style="margin: 6px 0 0;">ดูเลเวลนักออม, ค่า EXP, ตราความสำเร็จ (Badges), สถิติรายรับ–รายจ่าย และเควสหลัก</p>
+  </a>
+
+  <a class="card" href="{{ url_for('page', name='page2') }}">
+    <span class="card-kicker">Page 2 · Records</span>
+    <span class="card-title">Income & Expense</span>
+    <p class="note" style="margin: 6px 0 0;">บันทึกเงินเข้า/ออกอย่างง่ายดาย พร้อมระบบตรวจสอบความถูกต้อง (Validation) และตัวกรองประวัติ</p>
+  </a>
+
+  <a class="card" href="{{ url_for('page', name='page3') }}">
+    <span class="card-kicker">Page 3 · Goals & Simulation</span>
+    <span class="card-title">Quest Planner</span>
+    <p class="note" style="margin: 6px 0 0;">ตั้งเป้าหมายทางการเงิน คำนวณเงินออมต่อวัน/เดือน และจำลองตารางเงินเก็บสะสมรายงวด</p>
+  </a>
+
+  <a class="card" href="{{ url_for('page', name='page4') }}">
+    <span class="card-kicker">Page 4 · Bonus +5</span>
+    <span class="card-title">Daily Quest</span>
+    <p class="note" style="margin: 6px 0 0;">ภารกิจออมเงินรายวันแบบสุ่ม (Random Challenge) พร้อมมินิเกมลูกเต๋าเสี่ยงทายออมเงิน</p>
+  </a>
+
+  <a class="card" href="{{ url_for('page', name='team') }}">
+    <span class="card-kicker">ทีมผู้พัฒนา</span>
+    <span class="card-title">ข้อมูลสมาชิกกลุ่ม (Team)</span>
+    <p class="note" style="margin: 6px 0 0;">รายชื่อสมาชิกกลุ่มผู้พัฒนาโครงงาน รหัสนักศึกษา และบทบาทหน้าที่ความรับผิดชอบ</p>
+  </a>
+</section>
+{% endblock %}

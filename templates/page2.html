@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero">
+  <h1>{{ title }}</h1>
+  <p class="lead">บันทึกรายการเงินเข้า–เงินออก และตรวจสอบประวัติการใช้จ่ายย้อนหลัง</p>
+</div>
+
+<!-- สรุปภาพรวมย่อ -->
+<div class="stat-grid" style="margin-bottom: 20px;">
+  <div class="stat good">
+    <div class="label">รายรับทั้งหมด</div>
+    <div class="value">{{ "{:,.2f}".format(total_income) }} <span class="unit">บาท</span></div>
+  </div>
+  <div class="stat bad">
+    <div class="label">รายจ่ายทั้งหมด</div>
+    <div class="value">{{ "{:,.2f}".format(total_expense) }} <span class="unit">บาท</span></div>
+  </div>
+  <div class="stat {{ 'good' if net_balance >= 0 else 'bad' }}">
+    <div class="label">คงเหลือสุทธิ</div>
+    <div class="value">{{ "{:,.2f}".format(net_balance) }} <span class="unit">บาท</span></div>
+  </div>
+</div>
+
+<div class="two-col">
+  <!-- ฟอร์มบันทึกรายการใหม่ -->
+  <div class="panel">
+    <h3 style="margin-top: 0; margin-bottom: 16px;">📝 บันทึกรายการใหม่</h3>
+    <form method="post">
+      <div class="field">
+        <label>ประเภทรายการ</label>
+        <div style="display: flex; gap: 16px; margin-top: 6px;">
+          <label style="font-weight: normal; color: var(--ink); cursor: pointer;">
+            <input type="radio" name="type" value="expense" checked style="width: auto;"> 🔴 รายจ่าย
+          </label>
+          <label style="font-weight: normal; color: var(--ink); cursor: pointer;">
+            <input type="radio" name="type" value="income" style="width: auto;"> 🟢 รายรับ
+          </label>
+        </div>
+      </div>
+
+      <div class="field">
+        <label for="title">ชื่อรายการ / คำอธิบาย</label>
+        <input type="text" id="title" name="title" placeholder="เช่น ค่าอาหารกลางวัน, เงินเดือน" required>
+      </div>
+
+      <div class="field">
+        <label for="amount">จำนวนเงิน (บาท)</label>
+        <input type="number" id="amount" name="amount" step="0.01" min="0.01" placeholder="0.00" required>
+      </div>
+
+      <div class="field">
+        <label for="category">หมวดหมู่</label>
+        <select id="category" name="category" required>
+          <option value="">-- เลือกหมวดหมู่ --</option>
+          {% for code, name in categories %}
+            <option value="{{ code }}">{{ name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="field">
+        <label for="date">วันที่ทำรายการ</label>
+        <input type="date" id="date" name="date" value="{{ today_str }}">
+      </div>
+
+      <button type="submit" class="btn full" style="margin-top: 8px;">💾 บันทึกรายการ</button>
+    </form>
+  </div>
+
+  <!-- ประวัติรายการ & การค้นหา -->
+  <div>
+    <div class="panel" style="margin-bottom: 16px;">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px;">
+        <div class="pills" style="margin: 0;">
+          <a href="{{ url_for('page', name='page2') }}" class="{{ 'active' if not type_filter }}">ทั้งหมด ({{ count }})</a>
+          <a href="?type=income" class="{{ 'active' if type_filter == 'income' }}">รายรับ</a>
+          <a href="?type=expense" class="{{ 'active' if type_filter == 'expense' }}">รายจ่าย</a>
+        </div>
+
+        <form method="get" class="inline" style="display: flex; gap: 6px;">
+          {% if type_filter %}<input type="hidden" name="type" value="{{ type_filter }}">{% endif %}
+          <input type="text" name="q" value="{{ search_q }}" placeholder="ค้นหาชื่อ..." style="padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; font-size: 13px; max-width: 150px;">
+          <button type="submit" class="btn small ghost">ค้นหา</button>
+        </form>
+      </div>
+    </div>
+
+    {% if items %}
+      <table>
+        <thead>
+          <tr>
+            <th>วันที่</th>
+            <th>รายการ / หมวด</th>
+            <th class="num">จำนวน (บาท)</th>
+            <th style="width: 50px; text-align: center;">ลบ</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in items %}
+          <tr>
+            <td style="white-space: nowrap; font-size: 13px; color: var(--muted);">{{ item.date }}</td>
+            <td>
+              <div><strong>{{ item.title }}</strong></div>
+              <span class="badge">{{ category_dict.get(item.category, item.category) }}</span>
+            </td>
+            <td class="num" style="font-weight: 600;">
+              {% if item.type == 'income' %}
+                <span style="color: #1b6b3a;">+{{ "{:,.2f}".format(item.amount) }}</span>
+              {% else %}
+                <span style="color: #9b1c1c;">-{{ "{:,.2f}".format(item.amount) }}</span>
+              {% endif %}
+            </td>
+            <td style="text-align: center;">
+              <form method="post" class="inline">
+                <input type="hidden" name="delete" value="{{ item.id }}">
+                <button type="submit" class="btn small danger" title="ลบรายการ" onclick="return confirm('ต้องการลบรายการนี้ใช่หรือไม่?');">✕</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="empty">
+        <p>ไม่พบรายการที่ตรงกับเงื่อนไข</p>
+        {% if search_q or type_filter %}
+          <a href="{{ url_for('page', name='page2') }}" class="btn small ghost">ล้างตัวกรอง</a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}
+

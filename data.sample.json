@@ -1,0 +1,95 @@
+[
+  {
+    "id": 101,
+    "title": "เงินเดือนพาร์ทไทม์",
+    "amount": 15000.0,
+    "type": "income",
+    "category": "salary",
+    "date": "2026-09-01",
+    "is_selected": false
+  },
+  {
+    "id": 102,
+    "title": "ค่าหอพักและค่าน้ำไฟ",
+    "amount": 3800.0,
+    "type": "expense",
+    "category": "housing",
+    "date": "2026-09-02",
+    "is_selected": false
+  },
+  {
+    "id": 103,
+    "title": "ซื้อคีย์บอร์ดทำงาน",
+    "amount": 1890.0,
+    "type": "expense",
+    "category": "shopping",
+    "date": "2026-09-05",
+    "is_selected": false
+  },
+  {
+    "id": 104,
+    "title": "ชาบูหมูกระทะสายรหัส",
+    "amount": 650.0,
+    "type": "expense",
+    "category": "food",
+    "date": "2026-09-08",
+    "is_selected": false
+  },
+  {
+    "id": 105,
+    "title": "รับจ้างทำกราฟิก",
+    "amount": 3500.0,
+    "type": "income",
+    "category": "freelance",
+    "date": "2026-09-10",
+    "is_selected": false
+  },
+  {
+    "id": 106,
+    "title": "เติมเกม Steam Sale",
+    "amount": 750.0,
+    "type": "expense",
+    "category": "game",
+    "date": "2026-09-12",
+    "is_selected": false
+  },
+  {
+    "id": 107,
+    "title": "ค่าเดินทาง BTS/MRT",
+    "amount": 420.0,
+    "type": "expense",
+    "category": "travel",
+    "date": "2026-09-14",
+    "is_selected": false
+  },
+  {
+    "id": 108,
+    "title": "ซื้อคอมพิวเตอร์ใหม่",
+    "amount": 30000.0,
+    "type": "goal",
+    "category": "shopping",
+    "date": "2026-12-31",
+    "is_selected": true
+  },
+  {
+    "id": 109,
+    "title": "ทริปเที่ยวปิดเทอม",
+    "amount": 8000.0,
+    "type": "goal",
+    "category": "travel",
+    "date": "2026-11-15",
+    "is_selected": false
+  },
+  {
+    "id": 999,
+    "title": "MoneyPet",
+    "amount": 0.0,
+    "type": "pet",
+    "species": "cat",
+    "name": "น้องนำโชค",
+    "hat": "crown",
+    "accessory": "sunglasses",
+    "date": "2026-09-24",
+    "is_selected": true
+  }
+]

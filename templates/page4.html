@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;">
+    <div>
+      <h1>{{ title }}</h1>
+      <p class="lead">ภารกิจออมเงินรายวัน (Daily Challenge) สุ่มท้าทายตนเองเพื่อเพิ่มเงินเก็บทีละนิด!</p>
+    </div>
+    <div>
+      <a href="?reroll=1&seed={{ next_seed }}" class="btn ghost">🎲 สุ่มเควสใหม่ (Reroll)</a>
+    </div>
+  </div>
+</div>
+
+<!-- สรุปสถิติความสำเร็จเควสรายวัน -->
+<div class="stat-grid" style="margin-bottom: 24px;">
+  <div class="stat good">
+    <div class="label">เควสรายวันที่พิชิตสำเร็จ</div>
+    <div class="value">{{ completed_count }} <span class="unit">ภารกิจ</span></div>
+  </div>
+  <div class="stat gold">
+    <div class="label">เงินที่ออมได้จาก Daily Quest</div>
+    <div class="value">{{ "{:,.2f}".format(total_saved_from_quests) }} <span class="unit">บาท</span></div>
+  </div>
+</div>
+
+<!-- กระดานภารกิจประจำวัน (Daily Quests Board) -->
+<h2>📜 กระดานภารกิจประจำวัน</h2>
+<div class="card-grid" style="margin-bottom: 28px;">
+  {% for q in daily_quests %}
+  <div class="item-card" style="padding: 18px; border: 1.5px solid var(--line); display: flex; flex-direction: column; justify-content: space-between;">
+    <div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+        <span style="font-size: 28px;">{{ q.icon }}</span>
+        <span class="badge {{ 'good' if q.difficulty == 'ง่าย' else ('gold' if q.difficulty == 'ปานกลาง' else 'bad') }}">ระดับ: {{ q.difficulty }}</span>
+      </div>
+      <h3 style="margin: 0 0 6px; font-size: 17px; color: var(--maroon);">{{ q.title }}</h3>
+      <p style="font-size: 13.5px; color: var(--muted); margin: 0 0 12px;">{{ q.desc }}</p>
+    </div>
+
+    <div>
+      <div style="margin-bottom: 12px; display: flex; justify-content: space-between; align-items: baseline;">
+        <span style="font-size: 13px; color: var(--muted);">เงินออมภารกิจ:</span>
+        <strong style="font-size: 18px; color: #1b6b3a;">+{{ "{:,.2f}".format(q.reward) }} ฿</strong>
+      </div>
+
+      <form method="post">
+        <input type="hidden" name="quest_title" value="{{ q.title }}">
+        <input type="hidden" name="reward" value="{{ q.reward }}">
+        <button type="submit" class="btn full small" onclick="return confirm('ยืนยันว่าคุณทำภารกิจนี้สำเร็จแล้ว? ระบบจะเพิ่มเงินออม {{ q.reward }} บาท');">⚔️ พิชิตเควสนี้!</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<!-- มินิเกมเสี่ยงทาย: ลูกเต๋าออมเงิน -->
+<div class="hero-box" style="margin-bottom: 24px;">
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 14px;">
+    <div>
+      <span class="badge gold">Mini-Game Challenge</span>
+      <h3 style="margin: 8px 0 4px; font-size: 20px;">🎲 ลูกเต๋าเสี่ยงทายออมเงิน (Lucky Dice)</h3>
+      <p class="muted" style="margin: 0;">ทอยลูกเต๋าได้แต้ม <strong>{{ dice_num }}</strong> (แต้มคูณ 10) = ท้าให้ออมเงิน <strong>{{ dice_reward }} บาท</strong></p>
+    </div>
+    <div>
+      <form method="post" class="inline">
+        <input type="hidden" name="quest_title" value="ลูกเต๋าเสี่ยงทาย (ทอยได้แต้ม {{ dice_num }})">
+        <input type="hidden" name="reward" value="{{ dice_reward }}">
+        <button type="submit" class="btn">🎯 รับคำท้าและออม {{ dice_reward }} ฿</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ประวัติเควสที่พิชิตล่าสุด -->
+{% if recent_completed %}
+<div class="panel">
+  <h3 style="margin-top: 0; margin-bottom: 12px;">⏱️ ประวัติภารกิจที่พิชิตล่าสุด</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>วันที่</th>
+        <th>ภารกิจที่ทำสำเร็จ</th>
+        <th class="num">เงินออมที่ได้</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for item in recent_completed %}
+      <tr>
+        <td style="color: var(--muted); font-size: 13px;">{{ item.date }}</td>
+        <td><strong>{{ item.title }}</strong></td>
+        <td class="num"><span class="badge good">+{{ "{:,.2f}".format(item.amount) }} ฿</span></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+{% endblock %}

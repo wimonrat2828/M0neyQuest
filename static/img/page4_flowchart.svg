@@ -1,0 +1,172 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 880" width="100%" height="100%">
+  <defs>
+    <style>
+      .title { font-family: 'Segoe UI', Sarabun, sans-serif; font-size: 26px; font-weight: 700; fill: #7a1f2b; }
+      .subtitle { font-family: 'Segoe UI', Sarabun, sans-serif; font-size: 14px; fill: #64748b; }
+      .box-title { font-family: 'Segoe UI', Sarabun, sans-serif; font-size: 15px; font-weight: 700; fill: #1e293b; }
+      .box-desc { font-family: 'Segoe UI', Sarabun, sans-serif; font-size: 12.5px; fill: #475569; }
+      .tag { font-family: 'Segoe UI', Sarabun, sans-serif; font-size: 11px; font-weight: 700; }
+      .arrow-text { font-family: 'Segoe UI', Sarabun, sans-serif; font-size: 11.5px; font-weight: 600; fill: #64748b; }
+      .terminator { rx: 22px; ry: 22px; fill: #7a1f2b; stroke: #5c1620; stroke-width: 2; }
+      .terminator-text { font-family: 'Segoe UI', Sarabun, sans-serif; font-size: 14px; font-weight: 700; fill: #ffffff; text-anchor: middle; }
+    </style>
+    
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="112%" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.08" />
+    </filter>
+
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#64748b" />
+    </marker>
+    
+    <marker id="arrow-maroon" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="#7a1f2b" />
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="100%" height="100%" fill="#f8fafc" />
+  
+  <!-- Header Banner -->
+  <rect x="40" y="30" width="1200" height="90" rx="16" fill="#ffffff" stroke="#e2e8f0" stroke-width="1.5" filter="url(#shadow)" />
+  <rect x="40" y="30" width="8" height="90" rx="4" fill="#7a1f2b" />
+  <text x="68" y="70" class="title">Flowchart การทำงานของ Page 4 : Daily Quest (MoneyQuest)</text>
+  <text x="68" y="96" class="subtitle">แสดงขั้นตอนการทำงานของ def build() (GET Request) และ def handle() (POST Request) · ผู้รับผิดชอบ: นางสาววิมลรัตน์ ประเสริฐสิน</text>
+  
+  <!-- Column 1: GET Request (ซ้าย) -->
+  <rect x="40" y="145" width="580" height="705" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" filter="url(#shadow)" />
+  <rect x="60" y="165" width="140" height="28" rx="14" fill="#eff6ff" stroke="#bfdbfe" stroke-width="1" />
+  <text x="130" y="184" class="tag" fill="#1d4ed8" text-anchor="middle">🌐 1. GET REQUEST (build)</text>
+  <text x="215" y="184" class="box-desc" font-weight="600">การโหลดหน้าเว็บ &amp; สุ่มเควสประจำวัน</text>
+
+  <!-- Node G1: Start -->
+  <rect x="230" y="215" width="200" height="42" class="terminator" />
+  <text x="330" y="241" class="terminator-text">เริ่มต้น (เปิดหน้า /page4)</text>
+
+  <!-- Line G1 -> G2 -->
+  <line x1="330" y1="257" x2="330" y2="285" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Node G2: Load Data -->
+  <rect x="180" y="285" width="300" height="60" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" />
+  <text x="200" y="310" class="box-title">1. โหลดข้อมูลจาก data.json</text>
+  <text x="200" y="330" class="box-desc">เรียก storage.load() เพื่อนำรายการทั้งหมดมาประมวลผล</text>
+
+  <!-- Line G2 -> G3 -->
+  <line x1="330" y1="345" x2="330" y2="375" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Node G3: Loop Count & Sum -->
+  <rect x="160" y="375" width="340" height="74" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5" />
+  <text x="180" y="400" class="box-title">2. วนลูป (for item in items)</text>
+  <text x="180" y="420" class="box-desc">• ตรวจ if item.title ขึ้นต้นด้วย "ภารกิจ:"</text>
+  <text x="180" y="438" class="box-desc">• นับจำนวนเควสสำเร็จ &amp; รวมเงินที่ออมได้จากเควส</text>
+
+  <!-- Line G3 -> G4 -->
+  <line x1="330" y1="449" x2="330" y2="480" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Node G4: Decision Reroll? -->
+  <polygon points="330,480 440,525 330,570 220,525" fill="#fefce8" stroke="#facc15" stroke-width="1.8" />
+  <text x="330" y="522" class="box-title" text-anchor="middle" font-size="13">กด Reroll</text>
+  <text x="330" y="538" class="box-desc" text-anchor="middle">สุ่มใหม่หรือไม่?</text>
+
+  <!-- Line G4 -> Yes (Right) -->
+  <line x1="440" y1="525" x2="520" y2="525" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="465" y="515" class="arrow-text">ใช่ (Yes)</text>
+
+  <!-- Node G4_Yes: Random Seed -->
+  <rect x="520" y="495" width="90" height="60" rx="8" fill="#fef9c3" stroke="#eab308" stroke-width="1.5" />
+  <text x="565" y="522" class="box-desc" text-anchor="middle" font-weight="600">สุ่ม Seed</text>
+  <text x="565" y="540" class="box-desc" text-anchor="middle">ชุดใหม่</text>
+
+  <line x1="565" y1="555" x2="565" y2="625" stroke="#64748b" stroke-width="2" />
+  <line x1="565" y1="625" x2="480" y2="625" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Line G4 -> No (Down) -->
+  <line x1="330" y1="570" x2="330" y2="600" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="340" y="590" class="arrow-text">ไม่ใช่ (Default Seed)</text>
+
+  <!-- Node G5: Sample 3 Quests & Dice Roll -->
+  <rect x="160" y="600" width="340" height="85" rx="10" fill="#fff7ed" stroke="#fdba74" stroke-width="1.5" />
+  <text x="180" y="625" class="box-title">3. สุ่ม 3 เควส &amp; มินิเกมลูกเต๋า</text>
+  <text x="180" y="645" class="box-desc">• random.sample(QUEST_POOL, 3)</text>
+  <text x="180" y="663" class="box-desc">• ทอยลูกเต๋า random.randint(1, 6) x 10 บาท</text>
+
+  <!-- Line G5 -> G6 -->
+  <line x1="330" y1="685" x2="330" y2="715" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Node G6: Render HTML -->
+  <rect x="180" y="715" width="300" height="60" rx="10" fill="#eff6ff" stroke="#93c5fd" stroke-width="1.5" />
+  <text x="200" y="740" class="box-title">4. แสดงผลหน้า page4.html</text>
+  <text x="200" y="760" class="box-desc">การ์ดเควส 3 ใบ + ลูกเต๋า + สถิติความสำเร็จ</text>
+
+  <!-- Line G6 -> End -->
+  <line x1="330" y1="775" x2="330" y2="800" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+  <rect x="250" y="800" width="160" height="36" class="terminator" fill="#475569" stroke="#334155" />
+  <text x="330" y="823" class="terminator-text">ผู้ใช้รับชมหน้าเว็บ</text>
+
+
+  <!-- Column 2: POST Request (ขวา) -->
+  <rect x="660" y="145" width="580" height="705" rx="16" fill="#ffffff" stroke="#cbd5e1" stroke-width="1.5" filter="url(#shadow)" />
+  <rect x="680" y="165" width="150" height="28" rx="14" fill="#fdf2f8" stroke="#fbcfe8" stroke-width="1" />
+  <text x="755" y="184" class="tag" fill="#be185d" text-anchor="middle">⚡ 2. POST REQUEST (handle)</text>
+  <text x="845" y="184" class="box-desc" font-weight="600">การกดพิชิตเควส &amp; บันทึกเงินออม</text>
+
+  <!-- Node P1: User Click Submit -->
+  <rect x="850" y="215" width="200" height="42" class="terminator" fill="#be185d" stroke="#9d174d" />
+  <text x="950" y="241" class="terminator-text">กด "⚔️ พิชิตเควสนี้!"</text>
+
+  <!-- Line P1 -> P2 -->
+  <line x1="950" y1="257" x2="950" y2="285" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Node P2: Receive Form Data -->
+  <rect x="800" y="285" width="300" height="60" rx="10" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.5" />
+  <text x="820" y="310" class="box-title">1. รับข้อมูลจากแบบฟอร์ม</text>
+  <text x="820" y="330" class="box-desc">ดึง quest_title (ชื่อเควส) และ reward (เงินออม)</text>
+
+  <!-- Line P2 -> P3 -->
+  <line x1="950" y1="345" x2="950" y2="375" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Node P3: Decision Validation -->
+  <polygon points="950,375 1070,425 950,475 830,425" fill="#fefce8" stroke="#facc15" stroke-width="1.8" />
+  <text x="950" y="420" class="box-title" text-anchor="middle" font-size="13">ข้อมูลถูกต้อง?</text>
+  <text x="950" y="438" class="box-desc" text-anchor="middle">(มีชื่อ &amp; reward &gt; 0)</text>
+
+  <!-- Line P3 -> Invalid (Right) -->
+  <line x1="1070" y1="425" x2="1140" y2="425" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="1080" y="415" class="arrow-text" fill="#dc2626">ไม่ถูกต้อง</text>
+
+  <rect x="1140" y="395" width="85" height="60" rx="8" fill="#fef2f2" stroke="#f87171" stroke-width="1.5" />
+  <text x="1182" y="420" class="box-desc" text-anchor="middle" font-weight="700" fill="#dc2626">แจ้งเตือน</text>
+  <text x="1182" y="438" class="box-desc" text-anchor="middle" fill="#dc2626">ข้อผิดพลาด</text>
+
+  <!-- Line P3 -> Valid (Down) -->
+  <line x1="950" y1="475" x2="950" y2="515" stroke="#16a34a" stroke-width="2" marker-end="url(#arrow)" />
+  <text x="960" y="495" class="arrow-text" fill="#16a34a">ถูกต้อง (Valid)</text>
+
+  <!-- Node P4: Generate ID -->
+  <rect x="800" y="515" width="300" height="68" rx="10" fill="#f0fdf4" stroke="#86efac" stroke-width="1.5" />
+  <text x="820" y="540" class="box-title">2. สร้าง ID รายการใหม่</text>
+  <text x="820" y="560" class="box-desc">วนลูปหา max(id) ในฐานข้อมูล แล้ว new_id = max + 1</text>
+
+  <!-- Line P4 -> P5 -->
+  <line x1="950" y1="583" x2="950" y2="615" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Node P5: Append & Save -->
+  <rect x="770" y="615" width="360" height="92" rx="10" fill="#fdf4ff" stroke="#f0abfc" stroke-width="1.5" />
+  <text x="790" y="640" class="box-title">3. สร้าง Record และบันทึกลง data.json</text>
+  <text x="790" y="660" class="box-desc">• title: "ภารกิจ: " + quest_title, amount: reward</text>
+  <text x="790" y="678" class="box-desc">• type: "income", date: วันที่ปัจจุบัน</text>
+  <text x="790" y="696" class="box-desc">• storage.save(items) บันทึกลงไฟล์เรียบร้อย</text>
+
+  <!-- Line P5 -> P6 -->
+  <line x1="950" y1="707" x2="950" y2="735" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+
+  <!-- Node P6: Flash Success Banner & Redirect -->
+  <rect x="790" y="735" width="320" height="52" rx="10" fill="#fef9c3" stroke="#fde047" stroke-width="1.5" />
+  <text x="810" y="757" class="box-title" fill="#854d0e">4. แสดงแถบข้อความยินดี &amp; รีเฟรช</text>
+  <text x="810" y="775" class="box-desc">ส่งข้อความ "🎉 คุณพิชิตเควสและออมเงินสำเร็จ!"</text>
+
+  <!-- Line P6 -> End -->
+  <line x1="950" y1="787" x2="950" y2="810" stroke="#64748b" stroke-width="2" marker-end="url(#arrow)" />
+  <rect x="870" y="810" width="160" height="34" class="terminator" fill="#16a34a" stroke="#15803d" />
+  <text x="950" y="832" class="terminator-text">เสร็จสิ้น (Success)</text>
+</svg>

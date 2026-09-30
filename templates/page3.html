@@ -1,0 +1,160 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="hero">
+  <h1>{{ title }}</h1>
+  <p class="lead">วางแผนการออมเงิน ตั้งเควสเป้าหมาย และจำลองตารางเงินเก็บรายเดือนเพื่อพิชิตฝัน</p>
+</div>
+
+<!-- รายการเควสเป้าหมายทั้งหมด -->
+<h2>🎯 เควสเป้าหมายของคุณ</h2>
+{% if goals %}
+<div class="card-grid" style="margin-bottom: 24px;">
+  {% for g in goals %}
+  <div class="item-card" style="padding: 16px; border: 2px solid {{ 'var(--maroon)' if active_goal and active_goal.id == g.id else 'var(--line)' }};">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+      {% if g.is_selected %}
+        <span class="badge gold">★ เควสหลัก</span>
+      {% else %}
+        <span class="badge">เควสเสริม</span>
+      {% endif %}
+      <span class="muted" style="font-size: 12px;">กำหนด: {{ g.date }}</span>
+    </div>
+
+    <h3 style="margin: 0 0 6px; font-size: 18px; color: var(--maroon);">{{ g.title }}</h3>
+    <div class="price" style="font-size: 22px;">{{ "{:,.2f}".format(g.amount) }} <span style="font-size: 13px; font-weight: normal; color: var(--muted);">บาท</span></div>
+
+    <div style="margin-top: 14px; display: flex; gap: 6px; flex-wrap: wrap;">
+      <a href="?goal_id={{ g.id }}&months={{ months }}" class="btn small {{ 'ghost' if active_goal and active_goal.id != g.id }}">จำลองแผน</a>
+
+      {% if not g.is_selected %}
+      <form method="post" class="inline">
+        <input type="hidden" name="select_goal" value="{{ g.id }}">
+        <button type="submit" class="btn small ghost" title="ตั้งเป็นเป้าหมายหลัก">เลือกหลัก</button>
+      </form>
+      {% endif %}
+
+      <form method="post" class="inline" style="margin-left: auto;">
+        <input type="hidden" name="delete_goal" value="{{ g.id }}">
+        <button type="submit" class="btn small danger" onclick="return confirm('ยืนยันการลบเควสนี้?');" title="ลบเควส">✕</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+  <div class="empty" style="margin-bottom: 24px;">ยังไม่มีเควสเป้าหมาย เริ่มต้นสร้างเควสแรกของคุณด้านล่างได้เลย!</div>
+{% endif %}
+
+{% if goal_obj %}
+<!-- ส่วนเครื่องคิดเลขจำลองแผนการออม (Simulator) -->
+<div class="hero-box" style="margin-bottom: 24px;">
+  <div style="display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 10px;">
+    <div>
+      <span class="badge good">เครื่องคำนวณแผนการออม</span>
+      <h2 style="margin: 8px 0 4px;">จำลองแผนสำหรับ: {{ goal_obj.title }}</h2>
+      <p class="muted" style="margin: 0;">เป้าหมาย <strong>{{ "{:,.2f}".format(goal_obj.target_amount) }} บาท</strong> · ปัจจุบันมีเงินเก็บ <strong>{{ "{:,.2f}".format(current_savings) }} บาท</strong> (ขาดอีก {{ "{:,.2f}".format(remaining) }} บาท)</p>
+    </div>
+  </div>
+
+  <!-- ฟอร์มเลือกจำนวนเดือนจำลอง -->
+  <form method="get" style="margin-top: 18px; padding: 14px; background: var(--card); border-radius: 10px; border: 1px solid var(--line);">
+    <input type="hidden" name="goal_id" value="{{ active_goal.id if active_goal else '' }}">
+    <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+      <label for="months" style="font-weight: 600; font-size: 14px;">ต้องการเก็บให้สำเร็จภายใน:</label>
+      <input type="number" id="months" name="months" value="{{ months }}" min="1" max="36" style="width: 80px; padding: 6px 10px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px;">
+      <span>เดือน</span>
+      <button type="submit" class="btn small">คำนวณใหม่</button>
+    </div>
+  </form>
+
+  <!-- สรุปตัวเลขคำนวณ -->
+  <div class="stat-grid" style="margin: 18px 0;">
+    <div class="stat gold">
+      <div class="label">ต้องออมต่อเดือน</div>
+      <div class="value">{{ "{:,.2f}".format(monthly_saving) }} <span class="unit">บาท/เดือน</span></div>
+    </div>
+    <div class="stat">
+      <div class="label">ต้องออมต่อสัปดาห์ (โดยประมาณ)</div>
+      <div class="value" style="font-size: 22px;">{{ "{:,.2f}".format(weekly_saving) }} <span class="unit">บาท/สัปดาห์</span></div>
+    </div>
+    <div class="stat">
+      <div class="label">ต้องออมต่อวัน (โดยประมาณ)</div>
+      <div class="value" style="font-size: 22px;">{{ "{:,.2f}".format(daily_saving) }} <span class="unit">บาท/วัน</span></div>
+    </div>
+  </div>
+
+  {% if advice %}
+  <div class="banner" style="margin-bottom: 16px;">
+    {{ advice }}
+  </div>
+  {% endif %}
+
+  <!-- ตารางจำลองแผนทีละเดือน (Milestone Projection) -->
+  <h3>📅 แผนการออมสะสมรายเดือน (Milestones)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 70px;">เดือนที่</th>
+        <th class="num">เงินออมงวดนี้</th>
+        <th class="num">ยอดสะสมรวม</th>
+        <th>ความคืบหน้า</th>
+        <th class="num" style="width: 70px;">%</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in sim_rows %}
+      <tr>
+        <td><strong>เดือน {{ row.month }}</strong></td>
+        <td class="num">+{{ "{:,.2f}".format(row.monthly_deposit) }} ฿</td>
+        <td class="num" style="font-weight: 600; color: var(--maroon);">{{ "{:,.2f}".format(row.accumulated) }} ฿</td>
+        <td style="vertical-align: middle;">
+          <div class="progress">
+            <div style="width: {{ row.percent }}%;"></div>
+          </div>
+        </td>
+        <td class="num">{{ row.percent }}%</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
+<!-- ฟอร์มสร้างเควสเป้าหมายใหม่ -->
+<div class="panel">
+  <h3 style="margin-top: 0; margin-bottom: 14px;">➕ เพิ่มเควสเป้าหมายใหม่</h3>
+  <form method="post">
+    <div class="field-row">
+      <div class="field" style="flex: 2; min-width: 200px;">
+        <label for="title">ชื่อเควสเป้าหมาย</label>
+        <input type="text" id="title" name="title" placeholder="เช่น ซื้อโน้ตบุ๊ก, ทริปญี่ปุ่น" required>
+      </div>
+
+      <div class="field" style="flex: 1; min-width: 140px;">
+        <label for="amount">จำนวนเงินเป้าหมาย (บาท)</label>
+        <input type="number" id="amount" name="amount" step="1" min="1" placeholder="เช่น 30000" required>
+      </div>
+
+      <div class="field" style="flex: 1; min-width: 140px;">
+        <label for="target_date">วันที่ต้องการสำเร็จ</label>
+        <input type="date" id="target_date" name="target_date" value="2026-12-31">
+      </div>
+
+      <div class="field" style="flex: 1; min-width: 140px;">
+        <label for="category">หมวดเป้าหมาย</label>
+        <select id="category" name="category">
+          <option value="shopping">ช้อปปิ้ง / อุปกรณ์</option>
+          <option value="travel">ท่องเที่ยว</option>
+          <option value="housing">ที่อยู่อาศัย</option>
+          <option value="other">เป้าหมายอื่นๆ</option>
+        </select>
+      </div>
+
+      <div class="field" style="margin-bottom: 0;">
+        <button type="submit" class="btn">🚀 สร้างเควส</button>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
