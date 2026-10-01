@@ -81,15 +81,6 @@
     "is_selected": false
   },
   {
-    "id": 110,
-    "title": "ภารกิจ: งดหวาน ชื่นใจกระเป๋า",
-    "amount": 45.0,
-    "type": "income",
-    "category": "freelance",
-    "date": "2026-09-24",
-    "is_selected": false
-  },
-  {
     "id": 999,
     "title": "MoneyPet",
     "amount": 0.0,
